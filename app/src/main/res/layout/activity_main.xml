@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/photoimageView"
+        android:id="@+id/image_view"
         android:layout_width="384dp"
         android:layout_height="409dp"
         android:contentDescription="View for displaying image"
@@ -20,12 +22,25 @@
         app:srcCompat="@android:color/darker_gray" />
 
     <Button
-        android:id="@+id/cameraButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/img_pick_btn"
+        style="@style/Base.Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="start camera app"
+        android:layout_marginTop="16dp"
+        android:text="Choose Image"
+        app:layout_constraintBottom_toTopOf="@+id/capture_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <Button
+        android:id="@+id/capture_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Capture Image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/photoimageView" />
+        app:layout_constraintTop_toBottomOf="@+id/image_view" />
 </androidx.constraintlayout.widget.ConstraintLayout>

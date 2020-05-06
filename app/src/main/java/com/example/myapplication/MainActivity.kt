@@ -1,91 +1,100 @@
 package com.example.myapplication
 
+import android.Manifest
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Toast
-import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    var image_uri: Uri? = null
 
-    val CAMERA_REQUEST_CODE = 0
-    lateinit var imageFilePath: String
+    companion object {
+        private val IMAGE_PICK_CODE = 1000;
+        private val PERMISSION_CODE_GALLERY = 1001;
+        private val OPEN_CAMERA_CODE = 2000;
+        private val PERMISSION_CODE_CAMERA = 2001
+    }
 
+    fun Cube_is_empty(view: View){
+        val cube_text = Toast.makeText(this,"Oops, there is nothing here...",  Toast.LENGTH_SHORT)
+        cube_text.show()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        cameraButton.setOnClickListener {
-            try {
-                val imageFile = createImageFile()
-                val callCameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                if (callCameraIntent.resolveActivity(packageManager) != null) {
-                    val authorities = packageName + ".fileprovider"
-                    val imageURI = FileProvider.getUriForFile(this, authorities, imageFile)
-                    callCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI)
-                    startActivityForResult(callCameraIntent, CAMERA_REQUEST_CODE)
+        img_pick_btn.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    val permission = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    requestPermissions(permission, PERMISSION_CODE_GALLERY)
                 }
-            } catch (e: Exception) {
-                Toast.makeText(this, "Could not create file!", Toast.LENGTH_SHORT).show()
+                else
+                    pickImageFromGallery()
             }
+            else
+                pickImageFromGallery()
+        }
+        capture_btn.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    val permission = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    requestPermissions(permission, PERMISSION_CODE_CAMERA)
+                }
+                else
+                    openCamera()
+            }
+            else
+                openCamera()
         }
     }
 
+    private fun pickImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_PICK_CODE)
+    }
+    private fun openCamera() {
+        val values = ContentValues()
+        values.put(MediaStore.Images.Media.TITLE, "New Picture")
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
+        image_uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
+        startActivityForResult(cameraIntent, OPEN_CAMERA_CODE)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            when(requestCode) {
+                PERMISSION_CODE_GALLERY ->
+                    pickImageFromGallery()
+                PERMISSION_CODE_CAMERA ->
+                    openCamera()
+            }
+        }
+        else
+            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        when(requestCode) {
-            CAMERA_REQUEST_CODE -> {
-                /*if (resultCode == Activity.RESULT_OK && data != null){
-                    photoimageView.setImageBitmap(data.extras?.get("data") as Bitmap)
-                }*/
-
-                if (resultCode == Activity.RESULT_OK){
-                    photoimageView.setImageBitmap(setScaledBitmap())
+        if (resultCode == Activity.RESULT_OK)
+            when(requestCode) {
+                OPEN_CAMERA_CODE -> {
+                    image_view.setImageURI(image_uri)
+                }
+                IMAGE_PICK_CODE -> {
+                    image_view.setImageURI(data?.data)
                 }
             }
-            else -> {
-                Toast.makeText(this, "Unrecognized request code", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
-
-    @Throws(IOException::class)
-    fun createImageFile(): File {
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val imageFileName = "JPEG_" + timestamp + "_"
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        if(!storageDir?.exists()!!) storageDir?.mkdirs()
-        val imageFile = createTempFile(imageFileName, ".jpg", storageDir)
-        imageFilePath = imageFile.absolutePath
-        return imageFile
-    }
-
-    fun setScaledBitmap(): Bitmap {
-        val imageViewWidth = photoimageView.width
-        val imageViewHeight = photoimageView.height
-
-        val bmOptions = BitmapFactory.Options()
-        bmOptions.inJustDecodeBounds = true
-        BitmapFactory.decodeFile(imageFilePath, bmOptions)
-        val bitmapWidth = bmOptions.outWidth
-        val bitmapHeight = bmOptions.outHeight
-
-        val scaleFactor = Math.min(bitmapWidth /imageViewWidth, bitmapHeight /imageViewHeight)
-        bmOptions.inSampleSize = scaleFactor
-        bmOptions.inJustDecodeBounds = false
-
-        return BitmapFactory.decodeFile(imageFilePath, bmOptions)
-    }
-
 }
