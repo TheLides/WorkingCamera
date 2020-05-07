@@ -24,14 +24,14 @@ class MainActivity : AppCompatActivity() {
         private val PERMISSION_CODE_CAMERA = 2001
     }
 
-    fun Cube_is_empty(view: View){
+    /*fun Cube_is_empty(view: View){
         val cube_text = Toast.makeText(this,"Oops, there is nothing here...",  Toast.LENGTH_SHORT)
         cube_text.show()
-    }
+    }*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        img_pick_btn.setOnClickListener {
+        imgPickBtn.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                     val permission = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             else
                 pickImageFromGallery()
         }
-        capture_btn.setOnClickListener {
+        captureBtn.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
                     checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
@@ -90,10 +90,10 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK)
             when(requestCode) {
                 OPEN_CAMERA_CODE -> {
-                    image_view.setImageURI(image_uri)
+                    imageView.setImageURI(image_uri)
                 }
                 IMAGE_PICK_CODE -> {
-                    image_view.setImageURI(data?.data)
+                    imageView.setImageURI(data?.data)
                 }
             }
     }
