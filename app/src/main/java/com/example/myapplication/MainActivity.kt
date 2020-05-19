@@ -10,7 +10,6 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,15 +21,14 @@ class MainActivity : AppCompatActivity() {
         private val PERMISSION_CODE_GALLERY = 1001;
         private val OPEN_CAMERA_CODE = 2000;
         private val PERMISSION_CODE_CAMERA = 2001
+        const val image_path = "image_path"
     }
 
-    /*fun Cube_is_empty(view: View){
-        val cube_text = Toast.makeText(this,"Oops, there is nothing here...",  Toast.LENGTH_SHORT)
-        cube_text.show()
-    }*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         imgPickBtn.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
@@ -55,6 +53,11 @@ class MainActivity : AppCompatActivity() {
             }
             else
                 openCamera()
+        }
+        redactPhoto.setOnClickListener {
+            val intent = Intent(this, TurnPictureActivity::class.java)
+            intent.putExtra("image_path", image_uri.toString())
+            startActivity(intent)
         }
     }
 
@@ -94,6 +97,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 IMAGE_PICK_CODE -> {
                     imageView.setImageURI(data?.data)
+                    image_uri = data?.data
                 }
             }
     }
