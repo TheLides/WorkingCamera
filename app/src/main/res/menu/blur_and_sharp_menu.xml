@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/blur"
+        android:title="@string/blur"
+
+        android:layout_height="wrap_content"/>
+    <item
+        android:id="@+id/unsharp"
+        android:title="@string/unsharp"
+        android:layout_height="wrap_content"/>
+
+</menu>

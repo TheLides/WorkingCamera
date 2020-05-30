@@ -12,9 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RedactSizeActivity"></activity>
-        <activity android:name=".TurnPictureActivity" />
-        <activity android:name=".MainActivity">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@menu/turn_menu" />
+
+        <activity android:name=".RedactImageActivity" />
+        <activity
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

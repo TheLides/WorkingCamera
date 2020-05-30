@@ -2,16 +2,21 @@ package com.example.myapplication
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.LayoutInflater
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.permission_alertdialog.view.*
 
 class MainActivity : AppCompatActivity() {
     var image_uri: Uri? = null
@@ -22,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         private val OPEN_CAMERA_CODE = 2000;
         private val PERMISSION_CODE_CAMERA = 2001
         const val image_path = "image_path"
+        var allow = false
     }
 
 
@@ -55,9 +61,24 @@ class MainActivity : AppCompatActivity() {
                 openCamera()
         }
         redactPhoto.setOnClickListener {
-            val intent = Intent(this, TurnPictureActivity::class.java)
-            intent.putExtra("image_path", image_uri.toString())
-            startActivity(intent)
+            if (allow == true) {
+                val dialogView =
+                    LayoutInflater.from(this).inflate(R.layout.permission_alertdialog, null)
+                val builder = AlertDialog.Builder(this)
+                    .setView(dialogView)
+                    .setTitle("Attention!")
+                val alertDialog = builder.show()
+                alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.GRAY))
+                dialogView.dialogYesBtnPerm.setOnClickListener {
+                    alertDialog.dismiss()
+                    val intent = Intent(this, RedactImageActivity::class.java)
+                    intent.putExtra("image_path", image_uri.toString())
+                    startActivity(intent)
+                }
+                dialogView.dialogNoBtnPerm.setOnClickListener {
+                    alertDialog.dismiss()
+                }
+            }
         }
     }
 
@@ -94,10 +115,12 @@ class MainActivity : AppCompatActivity() {
             when(requestCode) {
                 OPEN_CAMERA_CODE -> {
                     imageView.setImageURI(image_uri)
+                    allow = true
                 }
                 IMAGE_PICK_CODE -> {
                     imageView.setImageURI(data?.data)
                     image_uri = data?.data
+                    allow = true
                 }
             }
     }

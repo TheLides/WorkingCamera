@@ -1,3 +1,37 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Pan Photo</string>
+    <string name="action_settings">Settings</string>
+    <string name="nameEffect2">Turn Any</string>
+    <string name="nameEffect1">Turn 90</string>
+    <string name="AllColours">Green->Blue Red-Green Blue-Red</string>
+    <string name="OneColour">One Colour</string>
+    <string name="toNegative">Negative</string>
+    <string name="respawn">Original</string>
+    <string name="attention">All changes will be removed. Continue?</string>
+    <string name="redactTurn">Turn</string>
+    <string name="redactFilters">Filters</string>
+    <string name="redactScale">Scaling</string>
+    <string name="redactOriginal">Return to Original</string>
+    <string name="alertdialogDegree">Enter Degree</string>
+    <string name="btnYes">Yes</string>
+    <string name="btnNo">No</string>
+    <string name="btnEnter">Enter</string>
+    <string name="btnCancel">Cancel</string>
+    <string name="attentionScaling">To reduce image enter number less than 100. To increase bigger than 100</string>
+    <string name="percentEnter">Enter percent</string>
+    <string name="blurANDshurp">Blur a Sharp</string>
+    <string name="blurEnterRad">Enter the radius</string>
+    <string name="blurEnterAm">Enter the amount</string>
+    <string name="blurEnterThreshold">Enter the threshold</string>
+    <string name="blur">Blur</string>
+    <string name="unsharp">Unsharped Mask</string>
+    <string name="permissionAttention">You will not be able to download image until all permissions are granted. There are two permissions: gallery and camera. Please, check. Continue?</string>
+    <string name="toBlack">Black and White</string>
+    <string name="toGray">Gray</string>
+    <string name="toSepia">Sepia</string>
+    <string name="brightness">Change brightness</string>
+    <string name="attentionBrightness">To make pic brighter enter number bigger than 1. Darker - less than 1.</string>
+    <string name="alertdialogBrightness">Enter the number</string>
+
+
 </resources>
