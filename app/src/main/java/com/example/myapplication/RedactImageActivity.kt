@@ -54,11 +54,12 @@ class RedactImageActivity : AppCompatActivity() {
             saveImage(imageView.drawable.toBitmap(), this, "Name")
         }
         buttonReturnOriginal.setOnClickListener {
-            val dialogView = LayoutInflater.from(this).inflate(R.layout.return_original_alertdialog, null)
+            val dialogView =
+                LayoutInflater.from(this).inflate(R.layout.return_original_alertdialog, null)
             val builder = AlertDialog.Builder(this)
                 .setView(dialogView)
                 .setTitle("Attention!")
-            val  alertDialog = builder.show()
+            val alertDialog = builder.show()
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.GRAY))
             dialogView.dialogYesBtn.setOnClickListener {
                 alertDialog.dismiss()
@@ -72,12 +73,12 @@ class RedactImageActivity : AppCompatActivity() {
             val dialogView = LayoutInflater.from(this).inflate(R.layout.scaling_alertdialog, null)
             val builder = AlertDialog.Builder(this)
                 .setView(dialogView)
-            val  alertDialog = builder.show()
+            val alertDialog = builder.show()
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.GRAY))
             dialogView.dialogScaleBtn.setOnClickListener {
                 alertDialog.dismiss()
                 val string = dialogView.dialogScaling.text.toString()
-                val scaleFactor = string.toFloat()/100
+                val scaleFactor = string.toFloat() / 100
                 val bitmap = imageView.drawable.toBitmap()
                 val bitmapNew = bilinearInterpolation(bitmap, scaleFactor)
                 imageView.setImageBitmap(bitmapNew)
@@ -100,23 +101,24 @@ class RedactImageActivity : AppCompatActivity() {
                 R.id.turn90 -> {
                     val degrees = 90.0
                     val bitmap = imageView.drawable.toBitmap()
-                    val newBitmap = Rotation.rotateCw(bitmap,degrees)
+                    val newBitmap = Rotation.rotateCw(bitmap, degrees)
                     imageView.setImageBitmap(newBitmap)
                     true
                 }
-                R.id.turnAny ->{
-                    val dialogView = LayoutInflater.from(this).inflate(R.layout.any_degree_alertdialog, null)
+                R.id.turnAny -> {
+                    val dialogView =
+                        LayoutInflater.from(this).inflate(R.layout.any_degree_alertdialog, null)
                     val builder = AlertDialog.Builder(this)
                         .setView(dialogView)
-                    val  alertDialog = builder.show()
+                    val alertDialog = builder.show()
                     alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.GRAY))
-                    dialogView.dialogEnterBtn.setOnClickListener{
+                    dialogView.dialogEnterBtn.setOnClickListener {
                         alertDialog.dismiss()
                         val string = dialogView.dialogDegree.text.toString()
-                            val degrees = string.toDouble()
-                            val bitmap = imageView.drawable.toBitmap()
-                            val newBitmap = Rotation.rotateCw(bitmap, degrees)
-                            imageView.setImageBitmap(newBitmap)
+                        val degrees = string.toDouble()
+                        val bitmap = imageView.drawable.toBitmap()
+                        val newBitmap = Rotation.rotateCw(bitmap, degrees)
+                        imageView.setImageBitmap(newBitmap)
                     }
                     dialogView.dialogCancelBtn.setOnClickListener {
                         alertDialog.dismiss()
@@ -128,6 +130,7 @@ class RedactImageActivity : AppCompatActivity() {
         }
         menu.show()
     }
+
     object Rotation {
         fun rotateCw(img: Bitmap, degrees: Double): Bitmap? {
             val width: Int = img.width
@@ -144,7 +147,7 @@ class RedactImageActivity : AppCompatActivity() {
                     val b = y - x0
                     val xx = (+a * cos - b * sin + x0).toInt()
                     val yy = (+a * sin + b * cos + y0).toInt()
-                    if (xx in 0 until width && yy in 0 until height)  {
+                    if (xx in 0 until width && yy in 0 until height) {
                         newImage.setPixel(x, y, img.getPixel(xx, yy))
                     }
                 }
@@ -164,44 +167,45 @@ class RedactImageActivity : AppCompatActivity() {
                     imageView.setImageBitmap(bitmap2)
                     true
                 }
-                R.id.changeOneColour ->{
+                R.id.changeOneColour -> {
                     val bitmap = imageView.drawable.toBitmap()
                     val bitmap2 = processingBitmap(bitmap, Filter.Blue)
                     imageView.setImageBitmap(bitmap2)
                     true
                 }
-                R.id.changeToNegative ->{
+                R.id.changeToNegative -> {
                     val bitmap = imageView.drawable.toBitmap()
                     val bitmap2 = processingBitmap(bitmap, Filter.NoRGB)
                     imageView.setImageBitmap(bitmap2)
                     true
                 }
-                R.id.changeToBlack ->{
+                R.id.changeToBlack -> {
                     val lightFactor: Float = 1F
                     val bitmap = imageView.drawable.toBitmap()
                     val bitmap2 = blackAndWhite(bitmap, lightFactor)
                     imageView.setImageBitmap(bitmap2)
                     true
                 }
-                R.id.changeToGray ->{
+                R.id.changeToGray -> {
                     val bitmap = imageView.drawable.toBitmap()
                     val bitmap2 = grayPicture(bitmap)
                     imageView.setImageBitmap(bitmap2)
                     true
                 }
-                R.id.changeToSepia ->{
+                R.id.changeToSepia -> {
                     val bitmap = imageView.drawable.toBitmap()
                     val bitmap2 = sepiaPicture(bitmap)
                     imageView.setImageBitmap(bitmap2)
                     true
                 }
-                R.id.changeBrightness ->{
-                    val dialogView = LayoutInflater.from(this).inflate(R.layout.brightness_alertdialog, null)
+                R.id.changeBrightness -> {
+                    val dialogView =
+                        LayoutInflater.from(this).inflate(R.layout.brightness_alertdialog, null)
                     val builder = AlertDialog.Builder(this)
                         .setView(dialogView)
-                    val  alertDialog = builder.show()
+                    val alertDialog = builder.show()
                     alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.GRAY))
-                    dialogView.dialogEnterBtnBr.setOnClickListener{
+                    dialogView.dialogEnterBtnBr.setOnClickListener {
                         alertDialog.dismiss()
                         val string = dialogView.dialogBrightness.text.toString()
                         val lightFactor = string.toFloat()
@@ -220,10 +224,11 @@ class RedactImageActivity : AppCompatActivity() {
         menu.show()
     }
 
-    internal enum class Filter{
+    internal enum class Filter {
         Blue, NoRGB, Red, Green, RGB;
     }
-    private fun processingBitmap(src: Bitmap,enum: Filter): Bitmap? {
+
+    private fun processingBitmap(src: Bitmap, enum: Filter): Bitmap? {
 
         val dest = Bitmap.createBitmap(
             src.width, src.height, src.config
@@ -238,15 +243,16 @@ class RedactImageActivity : AppCompatActivity() {
 
                 val newPixel = Color.argb(
                     pixelAlpha,
-                    if (enum == Filter.Red) pixelRed else if (enum == Filter.RGB) pixelBlue else if (enum == Filter.NoRGB) (255-pixelRed) else 0,
-                    if (enum == Filter.Green) pixelBlue else if (enum == Filter.RGB) pixelRed else if (enum == Filter.NoRGB) (255-pixelGreen) else 0,
-                    if (enum == Filter.Blue) pixelBlue else if (enum == Filter.RGB) pixelGreen else if (enum == Filter.NoRGB) (255-pixelBlue) else 0
+                    if (enum == Filter.Red) pixelRed else if (enum == Filter.RGB) pixelBlue else if (enum == Filter.NoRGB) (255 - pixelRed) else 0,
+                    if (enum == Filter.Green) pixelBlue else if (enum == Filter.RGB) pixelRed else if (enum == Filter.NoRGB) (255 - pixelGreen) else 0,
+                    if (enum == Filter.Blue) pixelBlue else if (enum == Filter.RGB) pixelGreen else if (enum == Filter.NoRGB) (255 - pixelBlue) else 0
                 )
                 dest.setPixel(x, y, newPixel)
             }
         }
         return dest
     }
+
     private fun brightnessPicture(src: Bitmap, brightness: Float): Bitmap? {
         val dest = Bitmap.createBitmap(
             src.width, src.height, src.config
@@ -255,19 +261,19 @@ class RedactImageActivity : AppCompatActivity() {
             for (y in 0 until src.height) {
                 val pixelColor = src.getPixel(x, y)
                 // получим информацию о прозрачности
-                var pixelAlpha = abs(((Color.alpha(pixelColor)*brightness))).toInt()
+                var pixelAlpha = abs(((Color.alpha(pixelColor) * brightness))).toInt()
                 // получим цвет каждого пикселя
-                var pixelRed = abs(((Color.red(pixelColor)*brightness))).toInt()
-                var pixelGreen = abs(((Color.green(pixelColor)*brightness))).toInt()
-                var pixelBlue = abs(((Color.blue(pixelColor)*brightness))).toInt()
+                var pixelRed = abs(((Color.red(pixelColor) * brightness))).toInt()
+                var pixelGreen = abs(((Color.green(pixelColor) * brightness))).toInt()
+                var pixelBlue = abs(((Color.blue(pixelColor) * brightness))).toInt()
 
-                if(pixelAlpha > 255)
+                if (pixelAlpha > 255)
                     pixelAlpha = 255
-                if(pixelRed > 255)
+                if (pixelRed > 255)
                     pixelRed = 255
-                if(pixelGreen > 255)
+                if (pixelGreen > 255)
                     pixelGreen = 255
-                if(pixelBlue > 255)
+                if (pixelBlue > 255)
                     pixelBlue = 255
 
                 val newPixel = Color.argb(pixelAlpha, pixelRed, pixelGreen, pixelBlue)
@@ -277,6 +283,7 @@ class RedactImageActivity : AppCompatActivity() {
         }
         return dest
     }
+
     private fun blackAndWhite(src: Bitmap, brightness: Float): Bitmap? {
         val dest = Bitmap.createBitmap(
             src.width, src.height, src.config
@@ -287,17 +294,16 @@ class RedactImageActivity : AppCompatActivity() {
                 // получим каждый пиксель
                 val pixelColor = src.getPixel(x, y)
                 // получим информацию о прозрачности
-                val pixelAlpha = abs(((Color.alpha(pixelColor)*brightness))).toInt()
+                val pixelAlpha = abs(((Color.alpha(pixelColor) * brightness))).toInt()
                 // получим цвет каждого пикселя
-                val pixelRed = abs(((Color.red(pixelColor)*brightness))).toInt()
-                val pixelGreen = abs(((Color.green(pixelColor)*brightness))).toInt()
-                val pixelBlue = abs(((Color.blue(pixelColor)*brightness))).toInt()
+                val pixelRed = abs(((Color.red(pixelColor) * brightness))).toInt()
+                val pixelGreen = abs(((Color.green(pixelColor) * brightness))).toInt()
+                val pixelBlue = abs(((Color.blue(pixelColor) * brightness))).toInt()
                 val total = pixelRed + pixelGreen + pixelBlue
                 if (total > separator) {
                     val newPixel = Color.argb(pixelAlpha, 255, 255, 255)
                     dest.setPixel(x, y, newPixel)
-                }
-                else {
+                } else {
                     val newPixel = Color.argb(pixelAlpha, 0, 0, 0)
                     dest.setPixel(x, y, newPixel)
                 }
@@ -306,6 +312,7 @@ class RedactImageActivity : AppCompatActivity() {
         }
         return dest
     }
+
     private fun grayPicture(src: Bitmap): Bitmap? {
         val dest = Bitmap.createBitmap(
             src.width, src.height, src.config
@@ -320,13 +327,13 @@ class RedactImageActivity : AppCompatActivity() {
                 var pixelGreen = abs((Color.green(pixelColor)))
                 var pixelBlue = abs((Color.blue(pixelColor)))
                 val gray = (pixelRed * 0.2126 + pixelGreen * 0.7152 + pixelBlue * 0.0722).toInt()
-                if(pixelAlpha > 255)
+                if (pixelAlpha > 255)
                     pixelAlpha = 255
-                if(pixelRed > 255)
+                if (pixelRed > 255)
                     pixelRed = 255
-                if(pixelGreen > 255)
+                if (pixelGreen > 255)
                     pixelGreen = 255
-                if(pixelBlue > 255)
+                if (pixelBlue > 255)
                     pixelBlue = 255
                 val newPixel = Color.argb(pixelAlpha, gray, gray, gray)
                 // полученный результат вернём в Bitmap
@@ -335,6 +342,7 @@ class RedactImageActivity : AppCompatActivity() {
         }
         return dest
     }
+
     private fun sepiaPicture(src: Bitmap): Bitmap? {
         val dest = Bitmap.createBitmap(
             src.width, src.height, src.config
@@ -351,13 +359,13 @@ class RedactImageActivity : AppCompatActivity() {
                 var red = (pixelRed * 0.393 + pixelGreen * 0.769 + pixelBlue * 0.189).toInt()
                 var green = (pixelRed * 0.349 + pixelGreen * 0.686 + pixelBlue * 0.168).toInt()
                 var blue = (pixelRed * 0.272 + pixelGreen * 0.534 + pixelBlue * 0.131).toInt()
-                if(pixelAlpha > 255)
+                if (pixelAlpha > 255)
                     pixelAlpha = 255
-                if(red > 255)
+                if (red > 255)
                     red = 255
-                if(green > 255)
+                if (green > 255)
                     green = 255
-                if(blue > 255)
+                if (blue > 255)
                     blue = 255
 
                 val newPixel = Color.argb(pixelAlpha, red, green, blue)
@@ -369,7 +377,11 @@ class RedactImageActivity : AppCompatActivity() {
     }
 
 
-    private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int,
+        reqHeight: Int
+    ): Int {
         val (height: Int, width: Int) = options.run { outHeight to outWidth }
         var inSampleSize = 1
 
@@ -385,28 +397,33 @@ class RedactImageActivity : AppCompatActivity() {
         return inSampleSize
     }
 
-    private fun decodeSampledBitmapFromFile(curUri: Uri, reqWidth: Int, reqHeight: Int, context: Context):Bitmap? {
+    private fun decodeSampledBitmapFromFile(
+        curUri: Uri,
+        reqWidth: Int,
+        reqHeight: Int,
+        context: Context
+    ): Bitmap? {
         val bitmap = BitmapFactory.Options().run {
-            val stream= context.contentResolver.openInputStream(curUri)
+            val stream = context.contentResolver.openInputStream(curUri)
             inJustDecodeBounds = true
-            BitmapFactory.decodeStream(stream,null,this)
+            BitmapFactory.decodeStream(stream, null, this)
             //считаем inSampleSize
-            inSampleSize = calculateInSampleSize(this,reqWidth,reqHeight)
+            inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
             //декодирование растр изображения с помощью inSampleSize
             inJustDecodeBounds = false
             val newBitmap = context.contentResolver.openInputStream(curUri)
-            BitmapFactory.decodeStream(newBitmap,null,this)
+            BitmapFactory.decodeStream(newBitmap, null, this)
         }
         return bitmap
     }
 
-    private fun bilinearInterpolation(originBitmap: Bitmap, scaleFactor:Float ): Bitmap {
+    private fun bilinearInterpolation(originBitmap: Bitmap, scaleFactor: Float): Bitmap {
         val widthOriginal = originBitmap.width
         val heightOriginal = originBitmap.height
-        val widthSecond= (originBitmap.width*scaleFactor).toInt()
-        val heightSecond= (originBitmap.height*scaleFactor).toInt()
-        val pixelsArray = IntArray(widthOriginal*heightOriginal)
-        originBitmap.getPixels(pixelsArray,0, widthOriginal,0,0, widthOriginal, heightOriginal)
+        val widthSecond = (originBitmap.width * scaleFactor).toInt()
+        val heightSecond = (originBitmap.height * scaleFactor).toInt()
+        val pixelsArray = IntArray(widthOriginal * heightOriginal)
+        originBitmap.getPixels(pixelsArray, 0, widthOriginal, 0, 0, widthOriginal, heightOriginal)
         val temp = IntArray(widthSecond * heightSecond)
         var a: Int
         var b: Int
@@ -435,11 +452,14 @@ class RedactImageActivity : AppCompatActivity() {
                 c = pixelsArray[index + widthOriginal]
                 d = pixelsArray[index + widthOriginal + 1]
 
-                blue = (a and 0xff) * (1 - xDiff) * (1 - yDiff) + (b and 0xff) * xDiff * (1 - yDiff) + (c and 0xff) * yDiff * (1 - xDiff) + (d and 0xff) * (xDiff * yDiff)
+                blue =
+                    (a and 0xff) * (1 - xDiff) * (1 - yDiff) + (b and 0xff) * xDiff * (1 - yDiff) + (c and 0xff) * yDiff * (1 - xDiff) + (d and 0xff) * (xDiff * yDiff)
 
-                green = (a shr 8 and 0xff) * (1 - xDiff) * (1 - yDiff) + (b shr 8 and 0xff) * xDiff * (1 - yDiff) + (c shr 8 and 0xff) * yDiff * (1 - xDiff) + (d shr 8 and 0xff) * (xDiff * yDiff)
+                green =
+                    (a shr 8 and 0xff) * (1 - xDiff) * (1 - yDiff) + (b shr 8 and 0xff) * xDiff * (1 - yDiff) + (c shr 8 and 0xff) * yDiff * (1 - xDiff) + (d shr 8 and 0xff) * (xDiff * yDiff)
 
-                red = (a shr 16 and 0xff) * (1 - xDiff) * (1 - yDiff) + (b shr 16 and 0xff) * xDiff * (1 - yDiff) + (c shr 16 and 0xff) * yDiff * (1 - xDiff) + (d shr 16 and 0xff) * (xDiff * yDiff)
+                red =
+                    (a shr 16 and 0xff) * (1 - xDiff) * (1 - yDiff) + (b shr 16 and 0xff) * xDiff * (1 - yDiff) + (c shr 16 and 0xff) * yDiff * (1 - xDiff) + (d shr 16 and 0xff) * (xDiff * yDiff)
                 temp[offset++] = -0x1000000 or  // hardcode alpha
                         (red.toInt() shl 16 and 0xff0000) or
                         (green.toInt() shl 8 and 0xff00) or
@@ -450,19 +470,20 @@ class RedactImageActivity : AppCompatActivity() {
         return Bitmap.createBitmap(temp, widthSecond, heightSecond, Bitmap.Config.ARGB_8888)
     }
 
-    private fun showPopupUnsharpAndBlur(){
+    private fun showPopupUnsharpAndBlur() {
         val menu = PopupMenu(this, buttonFilters)
         menu.inflate(R.menu.blur_and_sharp_menu)
         menu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.blur -> {
-                    val dialogView = LayoutInflater.from(this).inflate(R.layout.blur_alertdialog, null)
+                    val dialogView =
+                        LayoutInflater.from(this).inflate(R.layout.blur_alertdialog, null)
                     val builder = AlertDialog.Builder(this)
                         .setView(dialogView)
-                    val  alertDialog = builder.show()
+                    val alertDialog = builder.show()
                     alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.GRAY))
                     alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.GRAY))
-                    dialogView.dialogEntBtn.setOnClickListener{
+                    dialogView.dialogEntBtn.setOnClickListener {
                         alertDialog.dismiss()
                         val stringRad = dialogView.dialogBlurRadius.text.toString()
                         val radius = stringRad.toInt()
@@ -475,14 +496,15 @@ class RedactImageActivity : AppCompatActivity() {
                     }
                     true
                 }
-                R.id.unsharp ->{
-                    val dialogView = LayoutInflater.from(this).inflate(R.layout.unsharp_alertdialog, null)
+                R.id.unsharp -> {
+                    val dialogView =
+                        LayoutInflater.from(this).inflate(R.layout.unsharp_alertdialog, null)
                     val builder = AlertDialog.Builder(this)
                         .setView(dialogView)
-                    val  alertDialog = builder.show()
+                    val alertDialog = builder.show()
                     alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.GRAY))
                     alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.GRAY))
-                    dialogView.dialogEntBtn.setOnClickListener{
+                    dialogView.dialogEntBtn.setOnClickListener {
                         alertDialog.dismiss()
                         val stringRad = dialogView.dialogBlurRadius.text.toString()
                         val radius = stringRad.toInt()
@@ -511,7 +533,7 @@ class RedactImageActivity : AppCompatActivity() {
         threshold: Int,
         radius: Int,
         bitmapOrig: Bitmap
-    ):Bitmap {
+    ): Bitmap {
         var orgRed = 0
         var orgGreen = 0
         var orgBlue = 0
@@ -520,16 +542,24 @@ class RedactImageActivity : AppCompatActivity() {
         var blurredBlue = 0
         var usmPixel = 0
         val alpha = -0x1000000
-        val pixelsArray = IntArray(bitmapOrig.width*bitmapOrig.height)
-        bitmapOrig.getPixels(pixelsArray,0, bitmapOrig.width,0,0, bitmapOrig.width, bitmapOrig.height)
+        val pixelsArray = IntArray(bitmapOrig.width * bitmapOrig.height)
+        bitmapOrig.getPixels(
+            pixelsArray,
+            0,
+            bitmapOrig.width,
+            0,
+            0,
+            bitmapOrig.width,
+            bitmapOrig.height
+        )
         val bitmapBlur = boxBlur(bitmapOrig, radius)
         val temp = IntArray(bitmapBlur!!.width * bitmapBlur.height)
-        bitmapBlur.getPixels(temp,0, bitmapBlur.width,0,0, bitmapBlur.width, bitmapBlur.height)
+        bitmapBlur.getPixels(temp, 0, bitmapBlur.width, 0, 0, bitmapBlur.width, bitmapBlur.height)
 
         for (j in 0 until bitmapOrig.height) {
             for (i in 0 until bitmapOrig.width) {
-                val origPixel = pixelsArray[j*bitmapOrig.width+i]
-                val blurredPixel = temp[j*bitmapBlur.width+i]
+                val origPixel = pixelsArray[j * bitmapOrig.width + i]
+                val blurredPixel = temp[j * bitmapBlur.width + i]
                 orgRed = origPixel shr 16 and 0xff
                 orgGreen = origPixel shr 8 and 0xff
                 orgBlue = origPixel and 0xff
@@ -550,10 +580,15 @@ class RedactImageActivity : AppCompatActivity() {
                     orgBlue = if (orgBlue > 255) 255 else if (orgBlue < 0) 0 else orgBlue
                 }
                 usmPixel = alpha or (orgRed shl 16) or (orgGreen shl 8) or orgBlue
-                temp[j*bitmapOrig.width+i] = usmPixel
+                temp[j * bitmapOrig.width + i] = usmPixel
             }
         }
-        return Bitmap.createBitmap(temp, bitmapOrig.width, bitmapOrig.height, Bitmap.Config.ARGB_8888)
+        return Bitmap.createBitmap(
+            temp,
+            bitmapOrig.width,
+            bitmapOrig.height,
+            Bitmap.Config.ARGB_8888
+        )
     }
 
     private fun boxBlur(bmp: Bitmap, range: Int): Bitmap? {
@@ -572,6 +607,7 @@ class RedactImageActivity : AppCompatActivity() {
         c.drawBitmap(pixels, 0, w, 0.0f, 0.0f, w, h, true, null)
         return blurred
     }
+
     private fun boxBlurHorizontal(
         pixels: IntArray, w: Int, h: Int,
         halfRange: Int
@@ -605,7 +641,8 @@ class RedactImageActivity : AppCompatActivity() {
                     hits++
                 }
                 if (x >= 0) {
-                    newColors[x] = Color.argb(0xFF, (r / hits).toInt(), (g / hits).toInt(), (b / hits).toInt())
+                    newColors[x] =
+                        Color.argb(0xFF, (r / hits).toInt(), (g / hits).toInt(), (b / hits).toInt())
                 }
             }
             for (x in 0 until w) {
@@ -614,6 +651,7 @@ class RedactImageActivity : AppCompatActivity() {
             index += w
         }
     }
+
     private fun boxBlurVertical(
         pixels: IntArray, w: Int, h: Int,
         halfRange: Int
@@ -649,7 +687,8 @@ class RedactImageActivity : AppCompatActivity() {
                     hits++
                 }
                 if (y >= 0) {
-                    newColors[y] = Color.argb(0xFF, (r / hits).toInt(), (g / hits).toInt(), (b / hits).toInt())
+                    newColors[y] =
+                        Color.argb(0xFF, (r / hits).toInt(), (g / hits).toInt(), (b / hits).toInt())
                 }
                 index += w
             }
@@ -667,14 +706,16 @@ class RedactImageActivity : AppCompatActivity() {
             values.put(MediaStore.Images.Media.IS_PENDING, true)
             // RELATIVE_PATH and IS_PENDING are introduced in API 29.
 
-            val uri: Uri? = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            val uri: Uri? =
+                context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
             if (uri != null) {
                 saveImageToStream(bitmap, context.contentResolver.openOutputStream(uri))
                 values.put(MediaStore.Images.Media.IS_PENDING, false)
                 context.contentResolver.update(uri, values, null, null)
             }
         } else {
-            val directory = File(Environment.getExternalStorageDirectory().toString() + separator + folderName)
+            val directory =
+                File(Environment.getExternalStorageDirectory().toString() + separator + folderName)
             // getExternalStorageDirectory is deprecated in API 29
 
             if (!directory.exists()) {
@@ -692,7 +733,7 @@ class RedactImageActivity : AppCompatActivity() {
         }
     }
 
-    private fun contentValues() : ContentValues {
+    private fun contentValues(): ContentValues {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/png")
         values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000);

@@ -40,24 +40,24 @@ class MainActivity : AppCompatActivity() {
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                     val permission = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                     requestPermissions(permission, PERMISSION_CODE_GALLERY)
-                }
-                else
+                } else
                     pickImageFromGallery()
-            }
-            else
+            } else
                 pickImageFromGallery()
         }
         captureBtn.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
-                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-                    val permission = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
+                ) {
+                    val permission = arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
                     requestPermissions(permission, PERMISSION_CODE_CAMERA)
-                }
-                else
+                } else
                     openCamera()
-            }
-            else
+            } else
                 openCamera()
         }
         redactPhoto.setOnClickListener {
@@ -87,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE)
     }
+
     private fun openCamera() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
@@ -97,22 +98,26 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(cameraIntent, OPEN_CAMERA_CODE)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            when(requestCode) {
+            when (requestCode) {
                 PERMISSION_CODE_GALLERY ->
                     pickImageFromGallery()
                 PERMISSION_CODE_CAMERA ->
                     openCamera()
             }
-        }
-        else
+        } else
             Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK)
-            when(requestCode) {
+            when (requestCode) {
                 OPEN_CAMERA_CODE -> {
                     imageView.setImageURI(image_uri)
                     allow = true

@@ -17,8 +17,7 @@
             android:resource="@menu/turn_menu" />
 
         <activity android:name=".RedactImageActivity" />
-        <activity
-            android:name=".MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

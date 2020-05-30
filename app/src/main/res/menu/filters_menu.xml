@@ -2,30 +2,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/changeAllColours"
-        android:title="@string/AllColours"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:title="@string/AllColours" />
     <item
         android:id="@+id/changeOneColour"
-        android:title="@string/OneColour"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:title="@string/OneColour" />
     <item
         android:id="@+id/changeToNegative"
-        android:title="@string/toNegative"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:title="@string/toNegative" />
     <item
         android:id="@+id/changeToBlack"
-        android:title="@string/toBlack"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:title="@string/toBlack" />
     <item
         android:id="@+id/changeToGray"
-        android:title="@string/toGray"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:title="@string/toGray" />
     <item
         android:id="@+id/changeToSepia"
-        android:title="@string/toSepia"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:title="@string/toSepia" />
     <item
         android:id="@+id/changeBrightness"
-        android:title="@string/brightness"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:title="@string/brightness" />
 </menu>
